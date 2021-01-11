@@ -41,16 +41,16 @@ export default function Page({ Component, pageProps }: AppProps) {
   return [
     <Component {...pageProps} />,
     <div className="container mx-auto">
-      <div className="flex justify-around	items-center my-4">
+      <div className="flex justify-around items-center fixed top-0 bg-white container h-20">
         <Button display="Load People" onClick={() => setSize(1)} />
         <Button display="Load More People" onClick={() => setSize(size + 1)} />
       </div>
-      <div className="flex flex-wrap flex-col justify-between">
+      <div className="flex flex-wrap flex-col justify-between mt-24">
         {people &&
           people.length &&
           people.map((person: Person) => {
             return (
-              <div className="w-1/6 rounded bg-gray-400 mb-2">
+              <div className="w-1/3 rounded bg-gray-400 mb-2">
                 <UserCard
                   key={person.id}
                   email={person.email_address}
