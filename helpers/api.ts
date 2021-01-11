@@ -41,6 +41,7 @@ export default class Api {
     options: querystring.ParsedUrlQueryInput & GetPeopleOptions = {
       per_page: 10,
       include_paging_counts: true,
+      page: 1,
     }
   ): Promise<ApiResponse> {
     let qs = options ? '?' + querystring.stringify(options) : ''

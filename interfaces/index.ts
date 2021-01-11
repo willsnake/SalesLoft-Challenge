@@ -54,6 +54,7 @@ export interface Person {
 export interface GetPeopleOptions {
   ids?: Number[]
   include_paging_counts: Boolean
+  page: Number
   per_page: Number
   sort_by?: GetPeopleOptionsSortBy
   sort_direction?: GetPeopleOptionsSortDirection
