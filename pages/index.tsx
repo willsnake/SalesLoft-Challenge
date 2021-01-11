@@ -8,10 +8,6 @@ export default function Home() {
         <title>SalesLoft Challenge</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      <main className="container mx-auto">
-        <h1>SalesLoft Challenge by WillSnake</h1>
-      </main>
     </div>
   )
 }
