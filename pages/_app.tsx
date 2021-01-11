@@ -4,7 +4,13 @@ import type { AppProps } from 'next/app'
 
 import '../styles/globals.css'
 import { fetcher } from '../helpers/hooks'
+
+// Interfaces
 import { Person } from '../interfaces'
+
+// Componentes
+import Button from '../components/Button'
+import UserCard from '../components/UserCard'
 
 const PER_PAGE = 10
 const PAGE_URL = process.env.NEXT_PUBLIC_SALESLOFT_API_URL
@@ -17,7 +23,7 @@ export default function Page({ Component, pageProps }: AppProps) {
     fetcher
   )
 
-  const populatePeopleData = people => {
+  const populatePeopleData = (people) => {
     let newPeople = []
     for (let { data } of people) {
       newPeople = newPeople.concat(...data)
@@ -34,28 +40,27 @@ export default function Page({ Component, pageProps }: AppProps) {
 
   return [
     <Component {...pageProps} />,
-    <div>
-      <button
-        onClick={() => {
-          setSize(1)
-        }}
-      >
-        Load People
-      </button>
-      <p>
-        <button onClick={() => setSize(size + 1)}>Load more</button>
-        <button disabled={!size} onClick={() => setSize(0)}>
-          clear
-        </button>
-      </p>
-      <button onClick={() => mutate()}>refresh</button>
-      {people.map((person: Person) => {
-        return <div key={person.id}>
-          <p>- Name: {person.first_name} {person.last_name}</p>
-          <p>- Email: {person.email_address}</p>
-          <p>- Job Title: {person.title}</p>
-        </div>
-      })}
+    <div className="container mx-auto">
+      <div className="flex justify-around	items-center my-4">
+        <Button display="Load People" onClick={() => setSize(1)} />
+        <Button display="Load More People" onClick={() => setSize(size + 1)} />
+      </div>
+      <div className="flex flex-wrap flex-col justify-between">
+        {people &&
+          people.length &&
+          people.map((person: Person) => {
+            return (
+              <div className="w-1/6 rounded bg-gray-400 mb-2">
+                <UserCard
+                  key={person.id}
+                  email={person.email_address}
+                  jobTitle={person.title}
+                  name={`${person.first_name} ${person.last_name}`}
+                />
+              </div>
+            )
+          })}
+      </div>
     </div>,
   ]
 }
