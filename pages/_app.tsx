@@ -17,6 +17,7 @@ import { Person, PersonWithFrequency } from '../interfaces'
 import Button from '../components/Button'
 import UserCard from '../components/UserCard'
 import TableCount from '../components/TableCount'
+import Loader from '../components/Loader'
 
 const PER_PAGE = 10
 const PAGE_URL = process.env.NEXT_PUBLIC_SALESLOFT_API_URL
@@ -35,7 +36,7 @@ export default function Page({ Component, pageProps }: AppProps) {
   const [people, setPeople] = useState([])
   const [metadata, setMetadata] = useState(BASE_PAGING)
   const [showTableCount, setShowTableCount] = useState(false)
-  const { data, error, mutate, size, setSize, isValidating } = useSWRInfinite(
+  const { data, error, size, setSize } = useSWRInfinite(
     (index) => `${PAGE_URL}?perPage=${PER_PAGE}&page=${index + 1}`,
     fetcher
   )
@@ -58,9 +59,22 @@ export default function Page({ Component, pageProps }: AppProps) {
 
   const loadMorePeopleDisabled =
     metadata.paging.current_page < metadata.paging.total_pages
+  const isLoadingInitialData = !data && !error
+  const isLoadingMore =
+    isLoadingInitialData ||
+    (size > 0 && data && typeof data[size - 1] === 'undefined')
+
+  if (error) {
+    return (
+      <div>OH NO! Something happened, don't worry we're working to fix it</div>
+    )
+  }
 
   return [
     <Component {...pageProps} />,
+
+    <Loader show={isLoadingInitialData || isLoadingMore} />,
+
     <div className="container mx-auto">
       <div className="flex justify-around items-center fixed top-0 bg-white container h-20">
         <Button display="Load People" onClick={() => setSize(1)} />
