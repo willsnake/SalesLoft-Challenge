@@ -1,7 +1,8 @@
 // Interfaces
 import { Person, PersonWithFrequency, Frequency } from '../interfaces'
 
-const NGRAM_SIZE: Number = 2
+const NGRAM_SIZE: number = 2
+const FUZZY_SEARCH_THRESHOLD: number = 0.6
 
 /**
  * This method calculates the times a letter in the email of a person exists
@@ -121,4 +122,38 @@ export const diceCoefficient = (value: string, alternative: string) => {
   }
 
   return (2 * intersections) / (leftLength + rightLength)
+}
+
+/**
+ * This method returns an array
+ * @example
+ * Here's a simple example:
+ * ```
+ * const arrayStrings = ['test', 'tast', 'tesr', 'tesa', 'tezt']
+ * // Returns [ 'test', 'tesr', 'tesa' ]:
+ * fuzzySearch('test', arrayStrings);
+ * ```
+ * @param value - The first sample of string we want to compare
+ * @param arrayStrings - Array of strings we want to compare or string with
+ * @param threshold - This is the score we want to tell if a string is similiar or not
+ * @returns array of strings that are similar
+ */
+export const fuzzySearch = (
+  value: string,
+  arrayStrings: string[],
+  threshold: number = FUZZY_SEARCH_THRESHOLD
+) => {
+  let similiarStrings: Set<string> = new Set()
+
+  if (value === null || value === undefined) {
+    throw new Error("The value can't be null or undefined")
+  }
+
+  for (let i in arrayStrings) {
+    if (diceCoefficient(value, arrayStrings[i]) > threshold) {
+      similiarStrings.add(arrayStrings[i])
+    }
+  }
+
+  return [...similiarStrings]
 }

@@ -1,4 +1,4 @@
-import { frequencyCount, bigram, diceCoefficient } from '../../lib'
+import { frequencyCount, bigram, diceCoefficient, fuzzySearch } from '../../lib'
 import { people } from './mockData'
 import { PersonWithFrequency } from '../../interfaces'
 
@@ -101,6 +101,18 @@ describe('Libraries', () => {
       expect(diceCoefficient('impairWords', 'impairWordsag')).toBeGreaterThan(
         0.9
       )
+    })
+  })
+
+  describe('Fuzzy search', () => {
+    it('should return an array with similiar strings ', () => {
+      const arrayStrings = ['test', 'tast', 'tesr', 'tesa', 'tezt']
+      expect(fuzzySearch('test', arrayStrings).length).toBeGreaterThan(1)
+    })
+
+    it('should return an empty array', () => {
+      const arrayStrings = ['test', 'tast', 'tesr', 'tesa', 'tezt']
+      expect(fuzzySearch('night', arrayStrings).length).toBe(0)
     })
   })
 })
