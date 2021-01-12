@@ -11,6 +11,13 @@ export const config = {
   },
 }
 
+/**
+ * This endpoint was implemented to communicate with the SalesLoft API, in the future it can implement cache for the requests
+ * this will improve performance
+ * @typeParam NextApiRequest
+ * @typeParam NextApiResponse<ApiResponse>
+ * @returns NextApiResponse<ApiResponse>
+ */
 export default async (
   req: NextApiRequest,
   res: NextApiResponse<ApiResponse>
