@@ -76,3 +76,49 @@ export const bigram = (value: string) => {
 
   return nGrams
 }
+
+/**
+ * This method returns a score of the Dice coefficient of two strings
+ * you can see more information on {@link https://en.wikipedia.org/wiki/S%C3%B8rensen%E2%80%93Dice_coefficient}
+ * @example
+ * Here's a simple example:
+ * ```
+ * // Returns 0.5:
+ * diceCoefficient('night', 'naght');
+ * ```
+ * @param value - The first sample of string we want to compare
+ * @param alternative - The second sample of string we want to compare
+ * @returns score of the Dice coefficient
+ */
+export const diceCoefficient = (value: string, alternative: string) => {
+  var val = value.toLowerCase()
+  var alt = alternative.toLowerCase()
+  var left = val.length === 1 ? [val] : bigram(val)
+  var right = alt.length === 1 ? [alt] : bigram(alt)
+  var leftLength = left.length
+  var rightLength = right.length
+  var index = -1
+  var intersections = 0
+  var leftPair
+  var rightPair
+  var offset
+
+  while (++index < leftLength) {
+    leftPair = left[index]
+    offset = -1
+
+    while (++offset < rightLength) {
+      rightPair = right[offset]
+
+      if (leftPair === rightPair) {
+        intersections++
+
+        // Make sure this pair never matches again.
+        right[offset] = ''
+        break
+      }
+    }
+  }
+
+  return (2 * intersections) / (leftLength + rightLength)
+}

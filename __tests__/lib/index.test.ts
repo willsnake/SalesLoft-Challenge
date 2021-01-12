@@ -1,4 +1,4 @@
-import { frequencyCount, bigram } from '../../lib'
+import { frequencyCount, bigram, diceCoefficient } from '../../lib'
 import { people } from './mockData'
 import { PersonWithFrequency } from '../../interfaces'
 
@@ -77,6 +77,30 @@ describe('Libraries', () => {
 
     it('should return an emtpy a single ngram if two characters were given', () => {
       expect(bigram('te')).toEqual(['te'])
+    })
+  })
+
+  describe('Dice Coefficient', () => {
+    it('should return a score of 1', () => {
+      expect(diceCoefficient('test', 'test')).toEqual(1)
+    })
+
+    it('should return a score of 0.25', () => {
+      expect(diceCoefficient('night', 'nacht')).toEqual(0.25)
+    })
+
+    it('should return a score of 0.5', () => {
+      expect(diceCoefficient('night', 'naght')).toEqual(0.5)
+    })
+
+    it('should return a score of 0.75', () => {
+      expect(diceCoefficient('longWord', 'longerWord')).toEqual(0.75)
+    })
+
+    it('should return a score greater than 0.9', () => {
+      expect(diceCoefficient('impairWords', 'impairWordsag')).toBeGreaterThan(
+        0.9
+      )
     })
   })
 })
