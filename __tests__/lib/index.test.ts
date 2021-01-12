@@ -1,4 +1,4 @@
-import { frequencyCount } from '../../lib'
+import { frequencyCount, bigram } from '../../lib'
 import { people } from './mockData'
 import { PersonWithFrequency } from '../../interfaces'
 
@@ -55,7 +55,7 @@ const expectedResults = [
 
 describe('Libraries', () => {
   describe('FrequencyCount', () => {
-    it('should fetch people', async () => {
+    it('should fetch people', () => {
       const peopleWithFrecuency: PersonWithFrequency[] = frequencyCount(people)
       for (let p in peopleWithFrecuency) {
         const { frequency } = peopleWithFrecuency[p]
@@ -63,6 +63,20 @@ describe('Libraries', () => {
         expect(frequency.length).toBeGreaterThan(1)
         expect(frequency).toEqual(expectedResults[p])
       }
+    })
+  })
+
+  describe('Ngrams', () => {
+    it('should split a string into ngrams', () => {
+      expect(bigram('test')).toEqual(['te', 'es', 'st'])
+    })
+
+    it('should return an emtpy array if a character was given', () => {
+      expect(bigram('t')).toEqual([])
+    })
+
+    it('should return an emtpy a single ngram if two characters were given', () => {
+      expect(bigram('te')).toEqual(['te'])
     })
   })
 })

@@ -1,6 +1,8 @@
 // Interfaces
 import { Person, PersonWithFrequency, Frequency } from '../interfaces'
 
+const NGRAM_SIZE: Number = 2
+
 /**
  * This method calculates the times a letter in the email of a person exists
  * and returns an array sorted from most frecuent character to less frecuent character
@@ -43,4 +45,34 @@ const sortFrequency = (frequency: Frequency[]): Frequency[] => {
   return frequency.sort((a, b) => {
     return b.value - a.value
   })
+}
+
+/**
+ * This method returns a string on n-grams of two values, this is the base needed for the Dice coefficient calculation
+ * you can see more information here  {@link https://en.wikipedia.org/wiki/Bigram}
+ * @example
+ * Here's a simple example:
+ * ```
+ * // Returns "['te', 'es', 'st']":
+ * bigram('test');
+ * ```
+ * @param value - A string we want to get the bigram from
+ * @returns bigrams of a string
+ */
+export const bigram = (value: string) => {
+  let nGrams = []
+  let index
+
+  if (value === null || value === undefined) {
+    return nGrams
+  }
+
+  value = value.slice ? value : String(value)
+  index = value.length - Number(NGRAM_SIZE) + 1
+
+  while (index--) {
+    nGrams[index] = value.slice(index, index + NGRAM_SIZE)
+  }
+
+  return nGrams
 }
