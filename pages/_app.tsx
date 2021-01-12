@@ -3,14 +3,20 @@ import { useSWRInfinite } from 'swr'
 import type { AppProps } from 'next/app'
 
 import '../styles/globals.css'
+
+// Helpers
 import { fetcher } from '../helpers/hooks'
 
+// Libraries
+import { frequencyCount } from '../lib'
+
 // Interfaces
-import { Person } from '../interfaces'
+import { Person, PersonWithFrequency } from '../interfaces'
 
 // Componentes
 import Button from '../components/Button'
 import UserCard from '../components/UserCard'
+import TableCount from '../components/TableCount'
 
 const PER_PAGE = 10
 const PAGE_URL = process.env.NEXT_PUBLIC_SALESLOFT_API_URL
@@ -28,6 +34,7 @@ const BASE_PAGING = {
 export default function Page({ Component, pageProps }: AppProps) {
   const [people, setPeople] = useState([])
   const [metadata, setMetadata] = useState(BASE_PAGING)
+  const [showTableCount, setShowTableCount] = useState(false)
   const { data, error, mutate, size, setSize, isValidating } = useSWRInfinite(
     (index) => `${PAGE_URL}?perPage=${PER_PAGE}&page=${index + 1}`,
     fetcher
@@ -36,7 +43,8 @@ export default function Page({ Component, pageProps }: AppProps) {
   const populatePeopleData = (people) => {
     let newPeople = []
     for (let { data } of people) {
-      newPeople = newPeople.concat(...data)
+      const peopleWithFrequency = frequencyCount(data)
+      newPeople = newPeople.concat(...peopleWithFrequency)
     }
     return newPeople
   }
@@ -69,12 +77,16 @@ export default function Page({ Component, pageProps }: AppProps) {
             setMetadata(BASE_PAGING)
           }}
         />
+        <Button
+          display={!showTableCount ? 'Show Table Count' : 'Hide Table Count'}
+          onClick={() => setShowTableCount(!showTableCount)}
+        />
       </div>
 
       <div className="flex flex-wrap flex-col justify-between mt-24 mb-14">
         {people &&
           people.length &&
-          people.map((person: Person) => {
+          people.map((person: PersonWithFrequency) => {
             return (
               <div className="flex w-full justify-between h-36 mb-2">
                 <div className="w-1/3 rounded bg-gray-400">
@@ -85,148 +97,11 @@ export default function Page({ Component, pageProps }: AppProps) {
                     name={`${person.first_name} ${person.last_name}`}
                   />
                 </div>
-                <div className="w-1/2 rounded overflow-auto border-2 border-gray-400">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                        >
-                          Character
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                        >
-                          Count
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                      <tr>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          j
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          1
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          j
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          1
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          j
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          1
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          j
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          1
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          j
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          1
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          j
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          1
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          j
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          1
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          j
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          1
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          j
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          1
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          j
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          1
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          j
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          1
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          j
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          1
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          j
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          1
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          j
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          1
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          j
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          1
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
+                {showTableCount && (
+                  <div className="w-1/2 rounded overflow-auto border-2 border-gray-400">
+                    <TableCount rows={person.frequency} />
+                  </div>
+                )}
               </div>
             )
           })}
