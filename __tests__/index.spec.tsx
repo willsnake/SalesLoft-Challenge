@@ -7,7 +7,7 @@ describe('Pages', () => {
     it('should render the Header with the Page Title', function () {
       const wrap = shallow(<IndexPage />)
       expect(wrap.find('div').text()).toBe(
-        '<Head />SalesLoft Challenge by WillSnake'
+        '<Head />'
       )
     })
   })

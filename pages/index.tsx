@@ -5,7 +5,7 @@ export default function Home() {
   return (
     <div>
       <Head>
-        <title>SalesLoft Challenge</title>
+        <title>SalesLoft Challenge by WillSnake</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
     </div>
