@@ -10,6 +10,7 @@ describe('API Client', () => {
     const { data, metadata } = await api.getPeople({
       per_page: 1,
       include_paging_counts: true,
+      page: 1,
     })
 
     expect(data).not.toBeNull()

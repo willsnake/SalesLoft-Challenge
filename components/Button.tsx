@@ -14,7 +14,11 @@ export default function Button({
   return (
     <button
       disabled={disabled}
-      className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+      className={`bg-blue-500 text-white font-bold py-2 px-4 border-b-4 border-blue-700 rounded ${
+        disabled
+          ? `opacity-50 cursor-not-allowed`
+          : `hover:bg-blue-400 hover:border-blue-500`
+      }`}
       onClick={onClick}
     >
       {display}
