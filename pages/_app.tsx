@@ -11,7 +11,7 @@ import { fetcher } from '../helpers/hooks'
 import { frequencyCount } from '../lib'
 
 // Interfaces
-import { Person, PersonWithFrequency } from '../interfaces'
+import { PersonWithFrequency } from '../interfaces'
 
 // Componentes
 import Button from '../components/Button'
