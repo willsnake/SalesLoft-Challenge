@@ -1,19 +1,27 @@
 import { GetPeopleOptionsSortBy, GetPeopleOptionsSortDirection } from '../enums'
 
+export interface PersonWithFrequency extends Person {
+  frequency: Frequency[]
+}
+
+export interface Frequency {
+  letter: string
+  value: number
+}
 export interface Person {
   account: Account
-  bouncing: false
+  bouncing: boolean
   city: string
   contact_restrictions: any[]
   country: string
   counts: Counts
-  created_at: Date
+  created_at: string
   crm_id?: any
   crm_object_type?: any
   crm_url?: any
   custom_fields: any
   display_name: string
-  do_not_contact: false
+  do_not_contact: boolean
   email_address: string
   first_name: string
   full_email_address: string
@@ -30,7 +38,7 @@ export interface Person {
   locale?: any
   mobile_phone?: any
   most_recent_cadence?: any
-  owner: [Object]
+  owner: Owner
   owner_crm_id?: any
   person_company_industry?: any
   person_company_name?: any
@@ -45,7 +53,7 @@ export interface Person {
   tags: any[]
   title: string
   twitter_handle?: any
-  updated_at: Date
+  updated_at: string
   work_city?: any
   work_country?: any
   work_state?: any
