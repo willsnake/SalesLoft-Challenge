@@ -1,5 +1,10 @@
 import { GetPeopleOptionsSortBy, GetPeopleOptionsSortDirection } from '../enums'
 
+export interface ApiContructorParams {
+  apiKey: string
+  apiBaseUrl: string
+}
+
 export interface PersonWithFrequency extends Person {
   frequency: Frequency[]
 }

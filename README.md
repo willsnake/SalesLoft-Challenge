@@ -81,6 +81,14 @@ This button will toggle between showing or hiding a table with the frequency cou
 
 ![Show Table Count](examples/ShowTable.png 'Show Table Count')
 
+#### **Show Possible Duplicates**
+
+This button will toggle between showing or hiding a modal displaying the possible duplicates on the records you're watching on the page
+
+![Show Possible Duplicates](examples/ShowPossibleDuplicates.png 'Show Possible Duplicates')
+
+![Modal](examples/Modal.png 'Modal')
+
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.

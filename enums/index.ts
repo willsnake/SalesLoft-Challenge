@@ -1,3 +1,6 @@
+/**
+ * Enum for the multiple sort options when fetching the People data from the SalesLoft API
+ */
 export enum GetPeopleOptionsSortBy {
   account = 'account',
   cadence_stage_name = 'cadence_stage_name',
@@ -14,6 +17,9 @@ export enum GetPeopleOptionsSortBy {
   viewed_emails = 'viewed_emails',
 }
 
+/**
+ * Enum for the sort direction options when fetching the People data from the SalesLoft API
+ */
 export enum GetPeopleOptionsSortDirection {
   ASC = 'ASC',
   DESC = 'DESC',

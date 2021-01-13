@@ -8,7 +8,7 @@ import '../styles/globals.css'
 import { fetcher } from '../helpers/hooks'
 
 // Libraries
-import { frequencyCount } from '../lib'
+import { frequencyCount, fuzzySearch } from '../lib'
 
 // Interfaces
 import { PersonWithFrequency } from '../interfaces'
@@ -18,6 +18,7 @@ import Button from '../components/Button'
 import UserCard from '../components/UserCard'
 import TableCount from '../components/TableCount'
 import Loader from '../components/Loader'
+import ModalPossibleDuplicates from '../components/ModalPossibleDuplicates'
 
 const PER_PAGE = 10
 const PAGE_URL = process.env.NEXT_PUBLIC_SALESLOFT_API_URL
@@ -36,29 +37,55 @@ export default function Page({ Component, pageProps }: AppProps) {
   const [people, setPeople] = useState([])
   const [metadata, setMetadata] = useState(BASE_PAGING)
   const [showTableCount, setShowTableCount] = useState(false)
+  const [showPossibleDuplicates, setShowPossibleDuplicates] = useState(false)
+  const [possibleDuplicates, setPossibleDuplicates] = useState([])
+
   const { data, error, size, setSize } = useSWRInfinite(
     (index) => `${PAGE_URL}?perPage=${PER_PAGE}&page=${index + 1}`,
     fetcher
   )
 
-  const populatePeopleData = (people) => {
+  const populatePeopleData = (newPeopleToPopulateLocaly) => {
     let newPeople = []
-    for (let { data } of people) {
-      const peopleWithFrequency = frequencyCount(data)
-      newPeople = newPeople.concat(...peopleWithFrequency)
-    }
+    const peopleWithFrequency = frequencyCount(newPeopleToPopulateLocaly)
+    newPeople = people.concat(...peopleWithFrequency)
     return newPeople
+  }
+
+  const searchPosibleDuplicates = (arrayOfEmails: string[]): string[] => {
+    let setPosibleDuplicates: string[] = []
+
+    for (let email of arrayOfEmails) {
+      const duplicatesFound: string[] = fuzzySearch(email, arrayOfEmails)
+      if (duplicatesFound.length > 1) {
+        setPosibleDuplicates = setPosibleDuplicates.concat(...duplicatesFound)
+      }
+    }
+
+    return [...new Set(setPosibleDuplicates)]
   }
 
   useEffect(() => {
     if (data && data[size - 1]) {
-      setPeople(populatePeopleData(data))
-      setMetadata(data[size - 1].metadata)
+      const newPeopleToPopulate = data[size - 1]
+      setPeople(populatePeopleData(newPeopleToPopulate.data))
+      setMetadata(newPeopleToPopulate.metadata)
     }
   }, [data])
 
+  useEffect(() => {
+    const emailsMap: string[] = people.map((person: PersonWithFrequency) => {
+      return person.email_address
+    })
+    // We remove duplicates from the emailsMap
+    setPossibleDuplicates(searchPosibleDuplicates([...new Set(emailsMap)]))
+  }, [people])
+
+  // If there are no more pages on the API to display, disable the "Load More People" button
   const loadMorePeopleDisabled =
     metadata.paging.current_page < metadata.paging.total_pages
+
+  // Check if the app is loading
   const isLoadingInitialData = !data && !error
   const isLoadingMore =
     isLoadingInitialData ||
@@ -72,6 +99,14 @@ export default function Page({ Component, pageProps }: AppProps) {
 
   return [
     <Component {...pageProps} />,
+
+    showPossibleDuplicates && (
+      <ModalPossibleDuplicates
+        emails={possibleDuplicates}
+        onCloseButton={() => setShowPossibleDuplicates(!showPossibleDuplicates)}
+        onCloseSvg={() => setShowPossibleDuplicates(!showPossibleDuplicates)}
+      />
+    ),
 
     <Loader show={isLoadingInitialData || isLoadingMore} />,
 
@@ -94,6 +129,10 @@ export default function Page({ Component, pageProps }: AppProps) {
         <Button
           display={!showTableCount ? 'Show Table Count' : 'Hide Table Count'}
           onClick={() => setShowTableCount(!showTableCount)}
+        />
+        <Button
+          display={'Show Possible Duplicates'}
+          onClick={() => setShowPossibleDuplicates(!showPossibleDuplicates)}
         />
       </div>
 
